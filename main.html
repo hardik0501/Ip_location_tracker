@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🌐 IP & Location Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(-45deg, #6dd5ed, #2193b0, #f7971e, #ffd200);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      overflow: hidden;
+    }
+
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    button {
+      background: #ffffff33;
+      border: none;
+      padding: 14px 30px;
+      font-size: 18px;
+      color: #fff;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: 0.3s;
+      backdrop-filter: blur(6px);
+    }
+
+    button:hover {
+      background: #ffffff55;
+      transform: scale(1.05);
+    }
+
+    .card {
+      margin-top: 30px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 15px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      animation: fadeIn 1s ease;
+      display: none;
+      text-align: center;
+      backdrop-filter: blur(10px);
+    }
+
+    .card p {
+      font-size: 18px;
+      margin: 12px 0;
+    }
+
+    .map-img {
+      margin-top: 20px;
+      width: 100%;
+      height: 200px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 12px;
+      border: 2px solid white;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 500px) {
+      h1 { font-size: 2rem; }
+      button { font-size: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>📍 IP & Location Tracker</h1>
+  <button onclick="getLocationAndIP()">🔍 Locate Me</button>
+
+  <div class="card" id="infoCard">
+    <p id="ip">📶 IP: </p>
+    <p id="lat">📍 Latitude: </p>
+    <p id="lon">📍 Longitude: </p>
+    <p id="city">🏙️ City: </p>
+    <p id="country">🌍 Country: </p>
+    <div id="map" class="map-img"></div>
+  </div>
+
+  <script>
+    async function getLocationAndIP() {
+      document.getElementById('infoCard').style.display = 'block';
+      const ipInfo = await fetch('https://ipapi.co/json/').then(res => res.json());
+      const ip = ipInfo.ip;
+      const lat = ipInfo.latitude;
+      const lon = ipInfo.longitude;
+      const city = ipInfo.city;
+      const country = ipInfo.country_name;
+
+      document.getElementById("ip").textContent = "📶 IP: " + ip;
+      document.getElementById("lat").textContent = "📍 Latitude: " + lat;
+      document.getElementById("lon").textContent = "📍 Longitude: " + lon;
+      document.getElementById("city").textContent = "🏙️ City: " + city;
+      document.getElementById("country").textContent = "🌍 Country: " + country;
+
+      const mapImage = `https://static-maps.yandex.ru/1.x/?lang=en-US&ll=${lon},${lat}&z=13&l=map&size=400,200`;
+      document.getElementById("map").style.backgroundImage = `url('${mapImage}')`;
+    }
+  </script>
+
+</body>
+</html>
